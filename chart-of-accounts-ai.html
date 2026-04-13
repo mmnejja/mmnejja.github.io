@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chart of Accounts AI Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --ink: #18233a;
+      --muted: #5f6c86;
+      --panel: #ffffff;
+      --panel-border: #d5deeb;
+      --user-bubble: #0f4c81;
+      --user-bubble-ink: #f7fbff;
+      --ai-bubble: #e9eef7;
+      --accent: #1b7f61;
+      --error-bg: #ffe3e3;
+      --error-ink: #b11f1f;
+      --shadow: 0 22px 60px rgba(13, 34, 61, 0.14);
+      --radius: 16px;
+      --radius-sm: 12px;
+      --transition: 220ms ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Manrope", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 14% 18%, rgba(27, 127, 97, 0.12), transparent 34%),
+        radial-gradient(circle at 86% 12%, rgba(15, 76, 129, 0.14), transparent 30%),
+        linear-gradient(145deg, #fafdff 0%, var(--bg) 55%, #e9eff7 100%);
+      padding: 2rem 1rem;
+    }
+
+    .page {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(213, 222, 235, 0.8);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+      box-shadow: 0 8px 24px rgba(13, 34, 61, 0.08);
+    }
+
+    .title-wrap h1 {
+      font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .title-wrap p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 0.2rem;
+    }
+
+    .home-link {
+      border: 1px solid var(--panel-border);
+      border-radius: 999px;
+      padding: 0.52rem 0.95rem;
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: 700;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      background: #fff;
+      white-space: nowrap;
+    }
+
+    .home-link:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(27, 127, 97, 0.12);
+    }
+
+    .chat-shell {
+      display: flex;
+      flex-direction: column;
+      height: min(78vh, 780px);
+      min-height: 560px;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.72rem;
+      background:
+        linear-gradient(180deg, rgba(15, 76, 129, 0.03) 0%, rgba(27, 127, 97, 0.04) 100%),
+        #f8fbff;
+    }
+
+    .msg {
+      max-width: min(85%, 720px);
+      padding: 0.78rem 0.92rem;
+      border-radius: var(--radius-sm);
+      line-height: 1.45;
+      animation: reveal 180ms ease;
+      white-space: pre-wrap;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      background: var(--user-bubble);
+      color: var(--user-bubble-ink);
+      border-bottom-right-radius: 6px;
+    }
+
+    .msg.ai {
+      align-self: flex-start;
+      background: var(--ai-bubble);
+      border: 1px solid rgba(15, 76, 129, 0.12);
+      border-bottom-left-radius: 6px;
+    }
+
+    .msg.error {
+      background: var(--error-bg);
+      color: var(--error-ink);
+      border: 1px solid rgba(177, 31, 31, 0.2);
+    }
+
+    @keyframes reveal {
+      from {
+        transform: translateY(8px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .input-wrap {
+      border-top: 1px solid var(--panel-border);
+      background: #fff;
+      padding: 0.82rem;
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-end;
+    }
+
+    #input {
+      flex: 1;
+      min-height: 44px;
+      max-height: 160px;
+      resize: vertical;
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      font: inherit;
+      padding: 0.7rem 0.8rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+
+    #input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(27, 127, 97, 0.12);
+    }
+
+    #sendBtn {
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #1b7f61, #21a078);
+      color: #fff;
+      min-width: 104px;
+      height: 44px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform var(--transition), filter var(--transition);
+    }
+
+    #sendBtn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    #sendBtn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 0.7rem;
+      }
+
+      .chat-shell {
+        min-height: 72vh;
+      }
+
+      .msg {
+        max-width: 92%;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="title-wrap">
+        <h1>Chart of Accounts AI Assistant</h1>
+        <p>Ask for an account name and get the correct account number from your AI workflow.</p>
+      </div>
+      <a class="home-link" href="index.html">Back to Portfolio</a>
+    </header>
+
+    <main class="chat-shell" aria-label="Chart of Accounts AI chat">
+      <section id="messages" class="messages" aria-live="polite" aria-label="Messages"></section>
+      <div class="input-wrap">
+        <textarea id="input" placeholder="Type an account name, for example: Office supplies" rows="1"></textarea>
+        <button id="sendBtn" type="button">Send</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const WEBHOOK_URL = "http://localhost:5678/webhook/63133609-d348-4475-a4f4-e15f8f1feee2";
+
+    const messagesDiv = document.getElementById("messages");
+    const input = document.getElementById("input");
+    const sendBtn = document.getElementById("sendBtn");
+
+    function addMessage(text, type) {
+      const div = document.createElement("div");
+      div.className = "msg " + type;
+      div.innerText = text;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      return div;
+    }
+
+    function extractReply(data) {
+      if (!data) return "No response from AI";
+      if (typeof data === "string") return data;
+      if (Array.isArray(data) && data.length > 0) {
+        const first = data[0];
+        if (typeof first === "string") return first;
+        if (first && typeof first.reply === "string") return first.reply;
+        if (first && typeof first.output === "string") return first.output;
+      }
+      if (typeof data.reply === "string") return data.reply;
+      if (typeof data.output === "string") return data.output;
+      if (typeof data.message === "string") return data.message;
+      return JSON.stringify(data);
+    }
+
+    async function sendMessage() {
+      const message = input.value.trim();
+      if (!message || sendBtn.disabled) return;
+
+      addMessage(message, "user");
+      input.value = "";
+      input.focus();
+
+      sendBtn.disabled = true;
+      const typingMsg = addMessage("AI is typing...", "ai");
+
+      try {
+        const res = await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message })
+        });
+
+        if (!res.ok) {
+          throw new Error("Server returned " + res.status);
+        }
+
+        const data = await res.json();
+        typingMsg.innerText = extractReply(data);
+      } catch (err) {
+        typingMsg.innerText = "Error connecting to AI webhook. Check n8n is running and CORS is allowed.";
+        typingMsg.classList.add("error");
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+    sendBtn.addEventListener("click", sendMessage);
+
+    addMessage("Hello. Ask me for a chart of accounts item and I will return the account number.", "ai");
+  </script>
+</body>
+</html>
