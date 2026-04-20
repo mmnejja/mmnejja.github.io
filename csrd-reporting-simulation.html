@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSRD Reporting Simulation</title>
+  <meta name="description" content="Submit ESG reports for simulated CSRD reporting workflows." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="csrd-reporting-simulation.css" />
+</head>
+<body>
+  <div class="bg-orb orb-left" aria-hidden="true"></div>
+  <div class="bg-orb orb-right" aria-hidden="true"></div>
+
+  <main class="page-shell">
+    <section class="hero-card">
+      <p class="eyebrow">Assurance-Ready Sustainability</p>
+      <h1>CSRD Reporting Simulation</h1>
+      <p class="hero-copy">
+        Simulated ESG and CSRD data pipelines to support assurance-ready sustainability disclosures.
+      </p>
+
+      <div class="tool-chips" aria-label="Tools used">
+        <span>n8n</span>
+        <span>ESG disclosures</span>
+        <span>CSRD Frameworks</span>
+      </div>
+
+      <a
+        class="workflow-link"
+        href="https://csrd-reporting-simulation.onrender.com"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View Live Workflow
+      </a>
+    </section>
+
+    <section class="form-card" aria-label="ESG report submission">
+      <h2>Submit Your ESG Report</h2>
+      <p class="form-intro">Upload an HTML report to trigger the CSRD reporting simulation flow.</p>
+
+      <form id="csrdForm" novalidate>
+        <input type="hidden" name="to_email" value="mya4ccounting@gmail.com" />
+        <input type="hidden" name="subject" value="CSRD Reporting" />
+
+        <label for="name">Name</label>
+        <input id="name" name="from_name" type="text" required autocomplete="name" placeholder="Your full name" />
+
+        <label for="email">Email</label>
+        <input id="email" name="from_email" type="email" required autocomplete="email" placeholder="you@company.com" />
+
+        <label for="reportFile">ESG Report (.html only)</label>
+        <input
+          id="reportFile"
+          name="report_file"
+          type="file"
+          accept=".html,text/html"
+          required
+        />
+
+        <button id="submitBtn" type="submit">
+          <span id="btnText">Submit ESG Report</span>
+          <span id="btnSpinner" class="spinner hidden" aria-hidden="true"></span>
+        </button>
+
+        <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="csrd-reporting-simulation.js"></script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+:root {
+  --bg-1: #f3f9f8;
+  --bg-2: #eef3fb;
+  --ink: #122033;
+  --muted: #4f6278;
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface-border: rgba(18, 32, 51, 0.1);
+  --brand: #0f766e;
+  --brand-strong: #0c5f59;
+  --accent: #1f4ab8;
+  --ok: #0b8f5c;
+  --err: #b53737;
+  --shadow: 0 24px 60px rgba(9, 27, 49, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 15% 10%, rgba(15, 118, 110, 0.12), transparent 40%),
+    radial-gradient(circle at 90% 5%, rgba(31, 74, 184, 0.12), transparent 38%),
+    linear-gradient(150deg, var(--bg-1), var(--bg-2));
+  position: relative;
+  overflow-x: hidden;
+}
+
+.bg-orb {
+  position: fixed;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  filter: blur(45px);
+  z-index: -1;
+  opacity: 0.42;
+}
+
+.orb-left {
+  left: -120px;
+  top: 25%;
+  background: #5dd9c1;
+}
+
+.orb-right {
+  right: -110px;
+  top: 12%;
+  background: #8db5ff;
+}
+
+.page-shell {
+  width: min(1080px, 92%);
+  margin: 3.5rem auto;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 1.4rem;
+  align-items: stretch;
+}
+
+.hero-card,
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
+
+.hero-card {
+  padding: 2rem 2rem 2.3rem;
+  animation: riseIn 620ms ease;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+h1 {
+  margin: 0.8rem 0 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+
+.hero-copy {
+  margin: 1rem 0 1.4rem;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 46ch;
+}
+
+.tool-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 1.7rem;
+}
+
+.tool-chips span {
+  padding: 0.5rem 0.78rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(31, 74, 184, 0.2);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #23354c;
+}
+
+.workflow-link {
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(130deg, var(--brand), var(--accent));
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.workflow-link:hover,
+.workflow-link:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(31, 74, 184, 0.28);
+}
+
+.form-card {
+  padding: 1.8rem;
+  animation: riseIn 700ms ease;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.45rem;
+}
+
+.form-intro {
+  margin: 0.6rem 0 1.35rem;
+  color: var(--muted);
+}
+
+form {
+  display: grid;
+  gap: 0.72rem;
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="file"] {
+  width: 100%;
+  border: 1px solid #c8d4e7;
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.72rem 0.78rem;
+  font: inherit;
+  color: inherit;
+}
+
+input:focus-visible {
+  outline: 3px solid rgba(15, 118, 110, 0.2);
+  border-color: var(--brand);
+}
+
+button[type="submit"] {
+  margin-top: 0.4rem;
+  border: none;
+  border-radius: 12px;
+  padding: 0.82rem 1rem;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(140deg, var(--brand), var(--brand-strong));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+button[type="submit"]:hover,
+button[type="submit"]:focus-visible {
+  transform: translateY(-1px);
+}
+
+button[disabled] {
+  opacity: 0.78;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 720ms linear infinite;
+}
+
+.hidden {
+  display: none;
+}
+
+.form-message {
+  margin: 0.45rem 0 0;
+  min-height: 1.5rem;
+  font-weight: 600;
+}
+
+.form-message.success {
+  color: var(--ok);
+}
+
+.form-message.error {
+  color: var(--err);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .page-shell {
+    grid-template-columns: 1fr;
+    margin: 1.3rem auto 2rem;
+  }
+
+  .hero-card,
+  .form-card {
+    padding: 1.35rem;
+  }
+}

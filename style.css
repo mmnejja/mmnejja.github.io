@@ -669,6 +669,15 @@ body.dark .loader {
     grid-template-columns: 1fr;
   }
 
+  .project-card .btn-small,
+  .blog-card .text-link {
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
   .hero {
     padding-top: 5.5rem;
   }
