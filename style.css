@@ -590,8 +590,6 @@ body.dark .loader {
 .loader.hidden {
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
-  display: none;
 }
 
 .loader-ring {
@@ -669,15 +667,6 @@ body.dark .loader {
   .blog-grid,
   .skills-grid {
     grid-template-columns: 1fr;
-  }
-
-  .project-card .btn-small,
-  .blog-card .text-link {
-    width: 100%;
-  }
-
-  .btn {
-    width: 100%;
   }
 
   .hero {
