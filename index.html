@@ -3,71 +3,250 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Upload your ESG HTML report for CSRD Reporting Simulation review and workflow processing." />
-  <title>CSRD Reporting Simulation</title>
+  <meta name="description" content="Portfolio of Mohamed MN - Digital Auditor and AI-Driven Accountant." />
+  <title>Mohamed MN | Digital Auditor & AI-Driven Accountant</title>
+
+  <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="ambient ambient-a" aria-hidden="true"></div>
-  <div class="ambient ambient-b" aria-hidden="true"></div>
+  <!-- Loader -->
+  <div id="loader" class="loader" aria-hidden="true">
+    <div class="loader-ring"></div>
+    <p>Preparing insights...</p>
+  </div>
 
-  <header class="topbar">
-    <div class="brand">
-      <span class="brand-dot" aria-hidden="true"></span>
-      <span>CSRD Reporting Simulation</span>
-    </div>
-    <a class="workflow-link" href="https://csrd-reporting-simulation.onrender.com" target="_blank" rel="noopener noreferrer">View Live Workflow</a>
+  <!-- Navbar -->
+  <header class="header" id="home">
+    <nav class="nav container">
+      <a href="#home" class="logo" aria-label="Homepage">Mohamed MN</a>
+
+      <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links" id="nav-menu">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">Dark</button>
+    </nav>
   </header>
 
-  <main class="layout">
-    <section class="hero card">
-      <p class="eyebrow">Assurance-Ready ESG Delivery</p>
-      <h1>Submit your ESG HTML report for CSRD processing</h1>
-      <p class="lead">Simulated ESG and CSRD data pipelines to support assurance-ready sustainability disclosures.</p>
-
-      <div class="tools-panel" aria-label="Tools used">
-        <p class="tools-title">Tools used</p>
-        <ul class="tool-list">
-          <li>n8n</li>
-          <li>ESG disclosures</li>
-          <li>CSRD Frameworks</li>
-        </ul>
+  <main>
+    <!-- Hero -->
+    <section class="hero section">
+      <div class="hero-shape hero-shape-1"></div>
+      <div class="hero-shape hero-shape-2"></div>
+      <div class="container hero-content reveal">
+        <p class="eyebrow">Future-Ready Audit Intelligence</p>
+        <h1>Digital Auditor &amp; AI-Driven Accountant</h1>
+        <p class="hero-subtitle">
+          I help companies automate accounting, audit, and financial analysis using AI and data tools.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">View Projects</a>
+          <a class="btn btn-outline" href="#contact">Contact Me</a>
+        </div>
       </div>
     </section>
 
-    <section class="form-wrap card" aria-labelledby="submit-heading">
-      <h2 id="submit-heading">Upload ESG Report</h2>
-      <p class="form-intro">Your report will be emailed directly for CSRD simulation review.</p>
+    <!-- About -->
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">About</p>
+          <h2>Professional Profile</h2>
+        </div>
+        <div class="about-grid">
+          <article class="card reveal">
+            <p>
+              I am a finance and audit professional focused on digital transformation in accounting and assurance.
+              My work combines rigorous internal control thinking with AI and automation to improve speed,
+              reliability, and decision quality.
+            </p>
+          </article>
+          <article class="card highlight reveal">
+            <h3>Academic Journey</h3>
+            <ul class="list">
+              <!-- <li>ACCA student</li> -->
+              <li>Master's in Accounting Digitalization</li>
+              <li>Master's in Internal Audit &amp; Information Systems Audit</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
 
-      <form id="csrdForm" novalidate>
-        <div class="field">
-          <label for="name">Name</label>
-          <input id="name" name="name" type="text" placeholder="Enter your full name" required />
+    <!-- Skills -->
+    <section class="section section-alt" id="skills">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Skills</p>
+          <h2>Core Capabilities</h2>
         </div>
 
-        <div class="field">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="you@company.com" required />
+        <div class="skills-grid">
+          <article class="card skill-card reveal">
+            <h3><span class="skill-icon">&#128202;</span> Accounting &amp; Audit</h3>
+            <div class="tags">
+              <span>Excel</span>
+              <span>Power BI</span>
+              <span>Internal Control</span>
+              <span>Financial Analysis</span>
+            </div>
+          </article>
+
+          <article class="card skill-card reveal">
+            <h3><span class="skill-icon">&#129302;</span> Data &amp; AI</h3>
+            <div class="tags">
+              <span>Python</span>
+              <span>n8n</span>
+              <span>Automation Workflows</span>
+              <span>Anomaly Detection</span>
+            </div>
+          </article>
+
+          <article class="card skill-card reveal">
+            <h3><span class="skill-icon">&#128187;</span> ERP Systems</h3>
+            <div class="tags">
+              <span>SAP</span>
+              <span>Odoo</span>
+              <span>Sage</span>
+              <span>Microsoft Dynamics</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Projects</p>
+          <h2>Selected Work</h2>
         </div>
 
-        <div class="field">
-          <label for="reportFile">ESG Report (.html)</label>
-          <input id="reportFile" name="reportFile" type="file" accept=".html,text/html" required />
-          <p class="hint">Only HTML files are accepted.</p>
+        <div class="projects-grid">
+          <article class="card project-card reveal">
+            <h3>Chart of Accounts AI Assistant</h3>
+            <p>Chat with an AI assistant connected to n8n to find the right account number from your chart of accounts.</p>
+            <p class="tools">Tools: n8n, AI Agent, Vector Store</p>
+            <a href="chart-of-accounts-ai.html" class="btn btn-small">Open Assistant</a>
+          </article>
+
+          <article class="card project-card reveal">
+            <h3>Power BI Financial Dashboard</h3>
+            <p>Built executive-level dashboards tracking liquidity, margin, and forecasting KPIs in real time.</p>
+            <p class="tools">Tools: Power BI, Excel, DAX</p>
+            <a href="#contact" class="btn btn-small">View Project</a>
+          </article>
+
+          <article class="card project-card reveal">
+            <h3>Fraud Detection with MindBridge</h3>
+            <p>Applied risk scoring and journal-entry analytics to prioritize suspicious financial transactions.</p>
+            <p class="tools">Tools: MindBridge, Python, Audit Analytics</p>
+            <a href="#contact" class="btn btn-small">View Project</a>
+          </article>
+
+          <article class="card project-card reveal">
+            <h3>CSRD Reporting Simulation</h3>
+            <p>Simulated ESG and CSRD data pipelines to support assurance-ready sustainability disclosures.</p>
+            <p class="tools">Tools: Power BI, Excel, CSRD Frameworks</p>
+            <a href="#contact" class="btn btn-small">View Project</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog -->
+    <section class="section section-alt" id="blog">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Blog</p>
+          <h2>Latest Insights</h2>
         </div>
 
-        <button id="submitBtn" class="submit-btn" type="submit">
-          <span class="btn-label">Submit ESG Report</span>
-          <span class="spinner" aria-hidden="true"></span>
-        </button>
+        <div class="blog-grid">
+          <article class="card blog-card reveal">
+            <h3>AI in Audit</h3>
+            <p>How machine intelligence is improving precision, speed, and audit quality across engagements.</p>
+            <a href="#" class="text-link" aria-label="Read AI in Audit article">Read article</a>
+          </article>
 
-        <p id="formStatus" class="status" aria-live="polite"></p>
-      </form>
+          <article class="card blog-card reveal">
+            <h3>Future of Accounting</h3>
+            <p>Why the next generation accountant combines finance expertise with automation and analytics.</p>
+            <a href="#" class="text-link" aria-label="Read Future of Accounting article">Read article</a>
+          </article>
+
+          <article class="card blog-card reveal">
+            <h3>SAP vs Odoo</h3>
+            <p>A practical comparison of enterprise depth, implementation effort, and scalability by context.</p>
+            <a href="#" class="text-link" aria-label="Read SAP vs Odoo article">Read article</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Contact</p>
+          <h2>Let’s Work Together</h2>
+        </div>
+
+        <div class="contact-grid">
+          <form class="card contact-form reveal" id="contactForm" novalidate>
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" placeholder="Your name" required />
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@company.com" required />
+
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Tell me about your project" required></textarea>
+
+            <button class="btn btn-primary" type="submit">Send Message</button>
+            <p id="formStatus" class="form-status" aria-live="polite"></p>
+          </form>
+
+          <aside class="card contact-side reveal">
+            <h3>Connect</h3>
+            <p>Open to consulting, collaborations, and digital finance transformation projects.</p>
+            <ul class="social-list">
+              <li><a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+              <li><a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+          </aside>
+        </div>
+      </div>
     </section>
   </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <p>&copy; 2026 Mohamed MN. All rights reserved.</p>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">in</a>
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub">gh</a>
+      </div>
+    </div>
+  </footer>
 
   <script src="script.js"></script>
 </body>
