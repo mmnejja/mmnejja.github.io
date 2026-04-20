@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const loader = document.getElementById("loader");
+  if (loader) {
+    loader.style.opacity = "0";
+    loader.style.pointerEvents = "none";
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 220);
+  }
+
   const API_ENDPOINT = "http://localhost:5050/api/csrd-report";
   const form = document.getElementById("csrdForm");
   const submitBtn = document.getElementById("submitBtn");
