@@ -1,88 +1,118 @@
+// Handles loader, navigation interactions, section reveal, and optional dark mode.
 document.addEventListener("DOMContentLoaded", () => {
-  const API_ENDPOINT = "http://localhost:5050/api/csrd-report";
-  const form = document.getElementById("csrdForm");
-  const submitBtn = document.getElementById("submitBtn");
-  const statusEl = document.getElementById("formStatus");
+  const loader = document.getElementById("loader");
+  const navLinks = document.querySelectorAll(".nav-links a");
+  const sections = document.querySelectorAll("main section");
+  const menuToggle = document.querySelector(".menu-toggle");
+  const navMenu = document.getElementById("nav-menu");
+  const contactForm = document.getElementById("contactForm");
+  const formStatus = document.getElementById("formStatus");
+  const themeToggle = document.getElementById("themeToggle");
+  const revealElements = document.querySelectorAll(".reveal");
 
-  if (!form || !submitBtn || !statusEl) {
-    return;
+  // Simple loading screen for premium first impression.
+  window.setTimeout(() => {
+    if (loader) {
+      loader.classList.add("hidden");
+    }
+  }, 650);
+
+  // Mobile menu toggle.
+  if (menuToggle && navMenu) {
+    menuToggle.addEventListener("click", () => {
+      const isOpen = navMenu.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        navMenu.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    });
   }
 
-  const setStatus = (message, type) => {
-    statusEl.textContent = message;
-    statusEl.classList.remove("success", "error");
-    if (type) {
-      statusEl.classList.add(type);
-    }
+  // Highlights active section in navbar while scrolling.
+  const setActiveLink = () => {
+    const currentPosition = window.scrollY + 120;
+
+    sections.forEach((section) => {
+      const id = section.getAttribute("id");
+      if (!id) return;
+
+      const top = section.offsetTop;
+      const height = section.offsetHeight;
+      const activeLink = document.querySelector(`.nav-links a[href="#${id}"]`);
+
+      if (activeLink) {
+        if (currentPosition >= top && currentPosition < top + height) {
+          activeLink.classList.add("active");
+        } else {
+          activeLink.classList.remove("active");
+        }
+      }
+    });
   };
 
-  const setLoading = (isLoading) => {
-    submitBtn.disabled = isLoading;
-    submitBtn.classList.toggle("is-loading", isLoading);
-  };
+  window.addEventListener("scroll", setActiveLink);
+  setActiveLink();
 
-  const isHtmlFile = (file) => {
-    if (!file) {
-      return false;
-    }
-
-    const lowerName = file.name.toLowerCase();
-    const allowedTypes = ["text/html", "application/xhtml+xml", ""];
-    return lowerName.endsWith(".html") && allowedTypes.includes(file.type);
-  };
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    setStatus("", null);
-
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const reportFileInput = document.getElementById("reportFile");
-    const reportFile = reportFileInput.files && reportFileInput.files[0];
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!name || !email || !reportFile) {
-      setStatus("Please complete all fields and select your ESG HTML report.", "error");
-      return;
-    }
-
-    if (!emailRegex.test(email)) {
-      setStatus("Please provide a valid email address.", "error");
-      return;
-    }
-
-    if (!isHtmlFile(reportFile)) {
-      setStatus("Invalid file type. Please upload an .html file only.", "error");
-      return;
-    }
-
-    const payload = new FormData();
-    payload.append("name", name);
-    payload.append("email", email);
-    payload.append("reportFile", reportFile);
-
-    try {
-      setLoading(true);
-      setStatus("Sending report...", null);
-
-      const response = await fetch(API_ENDPOINT, {
-        method: "POST",
-        body: payload
+  // Scroll reveal animation.
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+          revealObserver.unobserve(entry.target);
+        }
       });
+    },
+    { threshold: 0.14 }
+  );
 
-      const result = await response.json();
+  revealElements.forEach((el) => revealObserver.observe(el));
 
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to send ESG report.");
+  // Contact form front-end validation/feedback.
+  if (contactForm && formStatus) {
+    contactForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+      if (!name || !email || !message) {
+        formStatus.textContent = "Please complete all fields before sending.";
+        formStatus.style.color = "#c0392b";
+        return;
       }
 
-      setStatus("ESG report submitted successfully. Thank you.", "success");
-      form.reset();
-    } catch (error) {
-      setStatus(error.message || "Unable to submit report right now. Please try again.", "error");
-    } finally {
-      setLoading(false);
+      if (!isEmailValid) {
+        formStatus.textContent = "Please enter a valid email address.";
+        formStatus.style.color = "#c0392b";
+        return;
+      }
+
+      formStatus.textContent = "Message sent successfully. Thank you.";
+      formStatus.style.color = "#00A86B";
+      contactForm.reset();
+    });
+  }
+
+  // Optional dark mode with local storage persistence.
+  if (themeToggle) {
+    const savedTheme = localStorage.getItem("portfolio-theme");
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark");
+      themeToggle.textContent = "Light";
     }
-  });
+
+    themeToggle.addEventListener("click", () => {
+      const isDark = document.body.classList.toggle("dark");
+      themeToggle.textContent = isDark ? "Light" : "Dark";
+      localStorage.setItem("portfolio-theme", isDark ? "dark" : "light");
+    });
+  }
 });
