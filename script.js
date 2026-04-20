@@ -1,4 +1,17 @@
 // Handles loader, navigation interactions, section reveal, and optional dark mode.
+const hideLoader = () => {
+  const loaderElement = document.getElementById("loader");
+  if (loaderElement) {
+    loaderElement.classList.add("hidden");
+  }
+};
+
+// Fallbacks so the loading screen never remains visible if any later script fails.
+document.addEventListener("DOMContentLoaded", hideLoader, { once: true });
+window.addEventListener("load", hideLoader, { once: true });
+window.addEventListener("pageshow", hideLoader, { once: true });
+window.setTimeout(hideLoader, 1400);
+
 document.addEventListener("DOMContentLoaded", () => {
   const loader = document.getElementById("loader");
   const navLinks = document.querySelectorAll(".nav-links a");
