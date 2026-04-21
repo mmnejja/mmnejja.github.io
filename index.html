@@ -3,9 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
   <meta name="description" content="Portfolio of Mohamed MN - Digital Auditor and AI-Driven Accountant." />
   <title>Mohamed MN | Digital Auditor & AI-Driven Accountant</title>
 
@@ -14,9 +11,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="style.css?v=20260421" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Loader -->
+  <div id="loader" class="loader" aria-hidden="true">
+    <div class="loader-ring"></div>
+    <p>Preparing insights...</p>
+  </div>
+
   <!-- Navbar -->
   <header class="header" id="home">
     <nav class="nav container">
@@ -33,7 +36,6 @@
         <li><a href="#about">About</a></li>
         <li><a href="#skills">Skills</a></li>
         <li><a href="#projects">Projects</a></li>
-        <li><a href="csrd-reporting-simulation.html">CSRD Simulation</a></li>
         <li><a href="#blog">Blog</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -139,10 +141,10 @@
 
         <div class="projects-grid">
           <article class="card project-card reveal">
-            <h3>Chart of Accounts AI Assistant</h3>
-            <p>Chat with an AI assistant connected to n8n to find the right account number from your chart of accounts.</p>
-            <p class="tools">Tools: n8n, AI Agent, Vector Store</p>
-            <a href="chart-of-accounts-ai.html" class="btn btn-small">Open Assistant</a>
+            <h3>AI Audit Automation using n8n</h3>
+            <p>Designed a workflow automating audit evidence collection, anomaly triage, and reporting cycles.</p>
+            <p class="tools">Tools: n8n, Excel, Python</p>
+            <a href="#contact" class="btn btn-small">View Project</a>
           </article>
 
           <article class="card project-card reveal">
@@ -162,8 +164,8 @@
           <article class="card project-card reveal">
             <h3>CSRD Reporting Simulation</h3>
             <p>Simulated ESG and CSRD data pipelines to support assurance-ready sustainability disclosures.</p>
-            <p class="tools">Tools: n8n, ESG disclosures, CSRD Frameworks</p>
-            <a href="csrd-reporting-simulation.html" class="btn btn-small">Open Simulation</a>
+            <p class="tools">Tools: Power BI, Excel, CSRD Frameworks</p>
+            <a href="#contact" class="btn btn-small">View Project</a>
           </article>
         </div>
       </div>
@@ -246,6 +248,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=20260421"></script>
+  <script src="script.js"></script>
 </body>
 </html>
