@@ -421,6 +421,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const getReportEndpoint = () => {
+        const productionApiBase = "https://csrd-backend.onrender.com";
         const params = new URLSearchParams(window.location.search);
         const apiOverride = params.get("api");
         if (apiOverride) {
@@ -429,17 +430,18 @@
 
         const host = window.location.hostname;
         const protocol = window.location.protocol;
-        const isLocal = host === "localhost" || host === "127.0.0.1" || protocol === "file:";
+        const isLocalPage = host === "localhost" || host === "127.0.0.1" || protocol === "file:";
 
-        if (isLocal) {
+        if (isLocalPage) {
           return "http://localhost:3000/send-report";
         }
 
-        return "/send-report";
+        return `${productionApiBase}/send-report`;
       };
 
       const REPORT_ENDPOINT = getReportEndpoint();
       const PAGE_ORIGIN = window.location.origin;
+      const isMixedContentBlocked = window.location.protocol === "https:" && REPORT_ENDPOINT.startsWith("http://");
 
       const form = document.getElementById("csrdForm");
       const submitBtn = document.getElementById("submitBtn");
@@ -456,6 +458,10 @@
         statusEl.textContent = message;
         statusEl.className = `status${type ? ` ${type}` : ""}`;
       };
+
+      if (isMixedContentBlocked) {
+        setStatus("This page is HTTPS but API endpoint is HTTP. Browsers block this request. Use ?api=https://your-backend-domain or deploy /send-report on this domain.", "error");
+      }
 
       const setLoading = (isLoading) => {
         submitBtn.disabled = isLoading;
@@ -537,7 +543,7 @@
         } catch (error) {
           const message = error && error.message ? error.message : "Failed to send the report.";
           if (message === "Failed to fetch") {
-            setStatus(`Network error: backend is unreachable or blocked by browser security. Endpoint: ${REPORT_ENDPOINT}. Page origin: ${PAGE_ORIGIN}.`, "error");
+            setStatus(`Network error: backend is unreachable or blocked by browser security. Endpoint: ${REPORT_ENDPOINT}. Page origin: ${PAGE_ORIGIN}. If page is live, deploy backend publicly (localhost works only on your own machine).`, "error");
             return;
           }
 
