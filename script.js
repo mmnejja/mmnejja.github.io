@@ -1,5 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const API_ENDPOINT = "http://localhost:5050/api/csrd-report";
+  const loader = document.getElementById("loader");
+  if (loader) {
+    loader.style.opacity = "0";
+    loader.style.pointerEvents = "none";
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 220);
+  }
+
+  const API_ENDPOINT = "http://localhost:3000/send-report";
   const form = document.getElementById("csrdForm");
   const submitBtn = document.getElementById("submitBtn");
   const statusEl = document.getElementById("formStatus");
@@ -60,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const payload = new FormData();
     payload.append("name", name);
     payload.append("email", email);
-    payload.append("reportFile", reportFile);
+    payload.append("file", reportFile);
 
     try {
       setLoading(true);
@@ -74,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || "Failed to send ESG report.");
+        throw new Error(result.message || result.error || "Failed to send ESG report.");
       }
 
       setStatus("ESG report submitted successfully. Thank you.", "success");

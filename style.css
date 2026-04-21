@@ -526,6 +526,7 @@ textarea:focus {
   gap: 1rem;
   z-index: 1100;
   transition: opacity 350ms ease, visibility 350ms ease;
+  animation: loader-auto-hide 380ms ease 2.4s forwards;
 }
 
 body.dark .loader {
@@ -535,6 +536,15 @@ body.dark .loader {
 .loader.hidden {
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
+}
+
+@keyframes loader-auto-hide {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 .loader-ring {

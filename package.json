@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:backend": "node server.js",
     "start:api": "node csrd-mail-server.js",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
