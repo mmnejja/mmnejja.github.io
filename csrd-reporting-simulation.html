@@ -420,7 +420,18 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const REPORT_ENDPOINT = "http://localhost:3000/send-report";
+      const getReportEndpoint = () => {
+        const host = window.location.hostname;
+        const isLocal = host === "localhost" || host === "127.0.0.1";
+
+        if (isLocal) {
+          return "http://localhost:3000/send-report";
+        }
+
+        return "/send-report";
+      };
+
+      const REPORT_ENDPOINT = getReportEndpoint();
 
       const form = document.getElementById("csrdForm");
       const submitBtn = document.getElementById("submitBtn");
@@ -502,6 +513,11 @@
           form.reset();
         } catch (error) {
           const message = error && error.message ? error.message : "Failed to send the report.";
+          if (message === "Failed to fetch") {
+            setStatus("Network error: backend is unreachable or blocked by browser security. Start server.js and check endpoint/CORS.", "error");
+            return;
+          }
+
           setStatus(message, "error");
         } finally {
           setLoading(false);
