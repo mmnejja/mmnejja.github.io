@@ -421,8 +421,15 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const getReportEndpoint = () => {
+        const params = new URLSearchParams(window.location.search);
+        const apiOverride = params.get("api");
+        if (apiOverride) {
+          return `${apiOverride.replace(/\/$/, "")}/send-report`;
+        }
+
         const host = window.location.hostname;
-        const isLocal = host === "localhost" || host === "127.0.0.1";
+        const protocol = window.location.protocol;
+        const isLocal = host === "localhost" || host === "127.0.0.1" || protocol === "file:";
 
         if (isLocal) {
           return "http://localhost:3000/send-report";
