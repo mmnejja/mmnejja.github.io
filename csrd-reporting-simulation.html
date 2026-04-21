@@ -439,6 +439,7 @@
       };
 
       const REPORT_ENDPOINT = getReportEndpoint();
+      const PAGE_ORIGIN = window.location.origin;
 
       const form = document.getElementById("csrdForm");
       const submitBtn = document.getElementById("submitBtn");
@@ -520,7 +521,7 @@
             if (!response.ok) {
               const looksLikeHtml = text.trim().startsWith("<") || contentType.includes("text/html");
               if (looksLikeHtml) {
-                throw new Error("Backend endpoint returned HTML instead of JSON. Check that /send-report is handled by server.js.");
+                throw new Error(`Backend endpoint returned HTML instead of JSON. Endpoint: ${REPORT_ENDPOINT}. If this page is on your live domain, deploy server.js there (or open with ?api=http://localhost:3000 for local testing).`);
               }
 
               throw new Error("Backend returned a non-JSON error response.");
@@ -536,7 +537,7 @@
         } catch (error) {
           const message = error && error.message ? error.message : "Failed to send the report.";
           if (message === "Failed to fetch") {
-            setStatus("Network error: backend is unreachable or blocked by browser security. Start server.js and check endpoint/CORS.", "error");
+            setStatus(`Network error: backend is unreachable or blocked by browser security. Endpoint: ${REPORT_ENDPOINT}. Page origin: ${PAGE_ORIGIN}.`, "error");
             return;
           }
 
