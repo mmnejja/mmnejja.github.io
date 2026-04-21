@@ -503,7 +503,22 @@
             body: formData
           });
 
-          const data = await response.json();
+          const contentType = (response.headers.get("content-type") || "").toLowerCase();
+          let data = null;
+
+          if (contentType.includes("application/json")) {
+            data = await response.json();
+          } else {
+            const text = await response.text();
+            if (!response.ok) {
+              const looksLikeHtml = text.trim().startsWith("<") || contentType.includes("text/html");
+              if (looksLikeHtml) {
+                throw new Error("Backend endpoint returned HTML instead of JSON. Check that /send-report is handled by server.js.");
+              }
+
+              throw new Error("Backend returned a non-JSON error response.");
+            }
+          }
 
           if (!response.ok) {
             throw new Error(data && data.error ? data.error : "Failed to send the report.");
