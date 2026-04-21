@@ -1,79 +1,102 @@
 const express = require("express");
-const cors = require("cors");
-const multer = require("multer");
 const nodemailer = require("nodemailer");
+const multer = require("multer");
+const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
-const port = Number(process.env.PORT || 3000);
-
 app.use(cors());
 app.use(express.json());
 
+const storage = multer.memoryStorage();
 const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 5 * 1024 * 1024
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const name = String(file.originalname || "").toLowerCase();
+    const type = String(file.mimetype || "").toLowerCase();
+    const allowedTypes = ["text/html", "application/xhtml+xml", "application/octet-stream", ""];
+
+    if (name.endsWith(".html") && allowedTypes.includes(type)) {
+      cb(null, true);
+      return;
+    }
+
+    cb(new Error("Only .html files are allowed"));
   }
 });
 
-app.get("/", (req, res) => {
-  res.status(200).send("CSRD backend is running.");
-});
+const mailUser = process.env.MAIL_USER;
+const mailPass = process.env.MAIL_PASS;
 
-app.get("/api/health", (req, res) => {
-  res.status(200).json({ ok: true, service: "csrd-backend" });
+if (!mailUser || !mailPass) {
+  console.warn("MAIL_USER and MAIL_PASS must be set in environment variables.");
+}
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: mailUser,
+    pass: mailPass
+  }
 });
 
 app.post("/send-report", upload.single("file"), async (req, res) => {
   try {
-    const { name, email } = req.body;
+    const name = String(req.body.name || "").trim();
+    const email = String(req.body.email || "").trim();
     const file = req.file;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!name || !email || !file) {
-      res.status(400).json({ error: "Name, email, and file are required." });
-      return;
+    if (!name || !email) {
+      return res.status(400).json({ error: "Name and email are required" });
     }
 
-    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    if (!isValidEmail) {
-      res.status(400).json({ error: "Invalid email address." });
-      return;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: "Invalid email format" });
     }
 
-    const appPassword = process.env.GMAIL_APP_PASSWORD || "YOUR_GMAIL_APP_PASSWORD";
-    if (appPassword === "YOUR_GMAIL_APP_PASSWORD") {
-      res.status(500).json({ error: "Server email password is not configured." });
-      return;
+    if (!file) {
+      return res.status(400).json({ error: "No file uploaded" });
     }
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "mya4ccounting@gmail.com",
-        pass: appPassword
-      }
-    });
+    if (!mailUser || !mailPass) {
+      return res.status(500).json({ error: "Email service is not configured" });
+    }
 
-    await transporter.sendMail({
-      from: "mya4ccounting@gmail.com",
-      to: "mya4ccounting@gmail.com",
+    const mailOptions = {
+      from: mailUser,
       replyTo: email,
-      subject: "CSRD Reporting",
-      text: `Name: ${name}\nEmail: ${email}\nFile: ${file.originalname}`,
+      to: mailUser,
+      subject: "CSRD Reporting Upload",
+      text: `Name: ${name}\nEmail: ${email}`,
       attachments: [
         {
           filename: file.originalname,
           content: file.buffer
         }
       ]
-    });
+    };
 
-    res.status(200).json({ success: true, message: "Report sent successfully." });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to send report." });
+    await transporter.sendMail(mailOptions);
+
+    res.json({ success: true, message: "Email sent successfully" });
+  } catch (err) {
+    console.error(err);
+
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: "Upload failed: file too large or invalid format" });
+    }
+
+    if (err && err.message === "Only .html files are allowed") {
+      return res.status(400).json({ error: err.message });
+    }
+
+    res.status(500).json({ error: "Email failed" });
   }
 });
+
+const port = Number(process.env.PORT) || 3000;
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

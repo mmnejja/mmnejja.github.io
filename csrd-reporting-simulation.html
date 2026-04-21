@@ -356,7 +356,6 @@
       }
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
   <div class="ambient ambient-a" aria-hidden="true"></div>
@@ -375,15 +374,15 @@
       <p class="eyebrow">ESG reporting workflow</p>
       <h1 id="pageTitle">Submit a CSRD report by email</h1>
       <p class="lead">
-        Upload an HTML report, validate the submission, and send the file content through EmailJS.
+        Upload an HTML report, validate the submission, and send it directly to our secure backend.
       </p>
 
       <div class="tools-panel">
         <p class="tools-title">Submission rules</p>
         <ul class="tool-list">
           <li>Required: name, email, and HTML file</li>
-          <li>Email subject is always CSRD Reporting</li>
-          <li>File content is read with FileReader before sending</li>
+          <li>Email subject is always CSRD Reporting Upload</li>
+          <li>File is uploaded as multipart form data</li>
         </ul>
       </div>
     </section>
@@ -421,9 +420,7 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const EMAILJS_PUBLIC_KEY = "_kBIwG5TAp6HIg798";
-      const EMAILJS_SERVICE_ID = "service_hbjc7di";
-      const EMAILJS_TEMPLATE_ID = "template_u5fi9q8";
+      const REPORT_ENDPOINT = "http://localhost:3000/send-report";
 
       const form = document.getElementById("csrdForm");
       const submitBtn = document.getElementById("submitBtn");
@@ -431,13 +428,10 @@
       const nameInput = document.getElementById("name");
       const emailInput = document.getElementById("email");
       const reportFileInput = document.getElementById("reportFile");
-      let isEmailJsReady = false;
 
       if (!form || !submitBtn || !statusEl || !nameInput || !emailInput || !reportFileInput) {
         return;
       }
-
-      const placeholders = new Set(["YOUR_PUBLIC_KEY", "YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", ""]);
 
       const setStatus = (message, type = "") => {
         statusEl.textContent = message;
@@ -459,41 +453,6 @@
         return fileName.endsWith(".html") && allowedMimeTypes.includes(file.type);
       };
 
-      const readFileAsText = (file) => new Promise((resolve, reject) => {
-        const fileReader = new FileReader();
-
-        fileReader.onload = () => {
-          resolve(String(fileReader.result || ""));
-        };
-
-        fileReader.onerror = () => {
-          reject(new Error("Could not read the selected file."));
-        };
-
-        fileReader.readAsText(file);
-      });
-
-      const areKeysConfigured = () => {
-        const publicKey = EMAILJS_PUBLIC_KEY.trim();
-        const serviceId = EMAILJS_SERVICE_ID.trim();
-        const templateId = EMAILJS_TEMPLATE_ID.trim();
-        return !placeholders.has(publicKey) && !placeholders.has(serviceId) && !placeholders.has(templateId);
-      };
-
-      if (window.emailjs && typeof window.emailjs.init === "function") {
-        try {
-          if (!areKeysConfigured()) {
-            console.warn("EmailJS keys are not configured");
-          } else {
-            window.emailjs.init(EMAILJS_PUBLIC_KEY);
-            isEmailJsReady = true;
-          }
-        } catch (error) {
-          console.warn("EmailJS initialization failed");
-        }
-      } else {
-        console.warn("EmailJS library failed to load");
-      }
 
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -519,40 +478,27 @@
           return;
         }
 
-        if (!areKeysConfigured()) {
-          setStatus("⚠️ Email service is not configured yet. Please try again later.", "error");
-          return;
-        }
-
-        if (!window.emailjs || typeof window.emailjs.send !== "function") {
-          setStatus("EmailJS is not available. Check the script include.", "error");
-          return;
-        }
-
-        if (!isEmailJsReady) {
-          setStatus("⚠️ Email service is not configured yet. Please try again later.", "error");
-          return;
-        }
-
         setLoading(true);
-        setStatus("Reading file...");
+        setStatus("Uploading report...");
 
         try {
-          const fileContent = await readFileAsText(reportFile);
-          const templateParams = {
-            name,
-            email,
-            subject: "CSRD Reporting",
-            file_name: reportFile.name,
-            file_content: fileContent,
-            message: fileContent
-          };
+          const formData = new FormData();
+          formData.append("name", name);
+          formData.append("email", email);
+          formData.append("file", reportFile);
 
-          setStatus("Sending report...");
+          const response = await fetch(REPORT_ENDPOINT, {
+            method: "POST",
+            body: formData
+          });
 
-          await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+          const data = await response.json();
 
-          setStatus("CSRD report sent successfully.", "success");
+          if (!response.ok) {
+            throw new Error(data && data.error ? data.error : "Failed to send the report.");
+          }
+
+          setStatus(data && data.message ? data.message : "CSRD report sent successfully.", "success");
           form.reset();
         } catch (error) {
           const message = error && error.message ? error.message : "Failed to send the report.";
