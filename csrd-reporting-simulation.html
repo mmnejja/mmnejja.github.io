@@ -482,6 +482,19 @@
         });
       };
 
+      const warmupBackend = async () => {
+        const isProductionApi = API_BASE === CONFIG.productionApi;
+        if (!isProductionApi) {
+          return;
+        }
+
+        try {
+          await fetchWithTimeout(`${API_BASE}/health`, { method: "GET" }, 12000);
+        } catch (error) {
+          // Continue even if warm-up fails; upload may still succeed.
+        }
+      };
+
       const isHtmlFile = (file) => {
         if (!file) {
           return false;
@@ -535,13 +548,17 @@
         }
 
         setLoading(true);
-        setStatus("Uploading report...");
+        setStatus("Waking backend...");
 
         try {
+          await warmupBackend();
+
           const formData = new FormData();
           formData.append("name", name);
           formData.append("email", email);
           formData.append("file", reportFile);
+
+          setStatus("Uploading report...");
 
           const response = await fetchWithTimeout(REPORT_ENDPOINT, {
             method: "POST",
