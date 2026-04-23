@@ -5,7 +5,36 @@ const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
-app.use(cors());
+
+const defaultAllowedOrigins = [
+  "https://mohamedmnejja.me",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "http://localhost:4200",
+  "http://127.0.0.1:4200"
+];
+
+const envAllowedOrigins = String(process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const allowedOrigins = envAllowedOrigins.length > 0 ? envAllowedOrigins : defaultAllowedOrigins;
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"]
+}));
+
+app.options("*", cors());
 app.use(express.json());
 
 app.get("/health", (req, res) => {
