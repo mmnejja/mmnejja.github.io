@@ -420,28 +420,30 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const getReportEndpoint = () => {
-        const productionApiBase = "https://csrd-backend.onrender.com";
+      const CONFIG = {
+        localApi: "http://localhost:3000",
+        productionApi: "https://csrd-backend.onrender.com",
+        route: "/send-report",
+        timeoutMs: 30000
+      };
+
+      const getApiBase = () => {
         const params = new URLSearchParams(window.location.search);
         const apiOverride = params.get("api");
         if (apiOverride) {
-          return `${apiOverride.replace(/\/$/, "")}/send-report`;
+          return apiOverride.replace(/\/$/, "");
         }
 
         const host = window.location.hostname;
         const protocol = window.location.protocol;
         const isLocalPage = host === "localhost" || host === "127.0.0.1" || protocol === "file:";
-
-        if (isLocalPage) {
-          return "http://localhost:3000/send-report";
-        }
-
-        return `${productionApiBase}/send-report`;
+        return isLocalPage ? CONFIG.localApi : CONFIG.productionApi;
       };
 
-      const REPORT_ENDPOINT = getReportEndpoint();
+      const API_BASE = getApiBase();
+      const REPORT_ENDPOINT = `${API_BASE}${CONFIG.route}`;
       const PAGE_ORIGIN = window.location.origin;
-      const isMixedContentBlocked = window.location.protocol === "https:" && REPORT_ENDPOINT.startsWith("http://");
+      const isMixedContentBlocked = window.location.protocol === "https:" && API_BASE.startsWith("http://");
 
       const form = document.getElementById("csrdForm");
       const submitBtn = document.getElementById("submitBtn");
@@ -468,6 +470,18 @@
         submitBtn.classList.toggle("is-loading", isLoading);
       };
 
+      const fetchWithTimeout = (url, options, timeoutMs = CONFIG.timeoutMs) => {
+        const controller = new AbortController();
+        const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+
+        return fetch(url, {
+          ...options,
+          signal: controller.signal
+        }).finally(() => {
+          window.clearTimeout(timeoutId);
+        });
+      };
+
       const isHtmlFile = (file) => {
         if (!file) {
           return false;
@@ -476,6 +490,23 @@
         const fileName = file.name.toLowerCase();
         const allowedMimeTypes = ["text/html", "application/xhtml+xml", "application/octet-stream", ""];
         return fileName.endsWith(".html") && allowedMimeTypes.includes(file.type);
+      };
+
+      const getErrorMessageFromResponse = async (response) => {
+        const contentType = (response.headers.get("content-type") || "").toLowerCase();
+
+        if (contentType.includes("application/json")) {
+          const payload = await response.json();
+          return payload && payload.error ? payload.error : "Failed to send the report.";
+        }
+
+        const text = await response.text();
+        const looksLikeHtml = text.trim().startsWith("<") || contentType.includes("text/html");
+        if (looksLikeHtml) {
+          return `Endpoint returned HTML instead of JSON. Endpoint: ${REPORT_ENDPOINT}.`;
+        }
+
+        return "Backend returned a non-JSON error response.";
       };
 
 
@@ -512,38 +543,29 @@
           formData.append("email", email);
           formData.append("file", reportFile);
 
-          const response = await fetch(REPORT_ENDPOINT, {
+          const response = await fetchWithTimeout(REPORT_ENDPOINT, {
             method: "POST",
             body: formData
           });
 
-          const contentType = (response.headers.get("content-type") || "").toLowerCase();
-          let data = null;
-
-          if (contentType.includes("application/json")) {
-            data = await response.json();
-          } else {
-            const text = await response.text();
-            if (!response.ok) {
-              const looksLikeHtml = text.trim().startsWith("<") || contentType.includes("text/html");
-              if (looksLikeHtml) {
-                throw new Error(`Backend endpoint returned HTML instead of JSON. Endpoint: ${REPORT_ENDPOINT}. If this page is on your live domain, deploy server.js there (or open with ?api=http://localhost:3000 for local testing).`);
-              }
-
-              throw new Error("Backend returned a non-JSON error response.");
-            }
-          }
-
           if (!response.ok) {
-            throw new Error(data && data.error ? data.error : "Failed to send the report.");
+            const errorMessage = await getErrorMessageFromResponse(response);
+            throw new Error(errorMessage);
           }
+
+          const data = await response.json();
 
           setStatus(data && data.message ? data.message : "CSRD report sent successfully.", "success");
           form.reset();
         } catch (error) {
           const message = error && error.message ? error.message : "Failed to send the report.";
           if (message === "Failed to fetch") {
-            setStatus(`Network error: backend is unreachable or blocked by browser security. Endpoint: ${REPORT_ENDPOINT}. Page origin: ${PAGE_ORIGIN}. If page is live, deploy backend publicly (localhost works only on your own machine).`, "error");
+            setStatus(`Network error: backend is unreachable or blocked by browser security. Endpoint: ${REPORT_ENDPOINT}. Page origin: ${PAGE_ORIGIN}.`, "error");
+            return;
+          }
+
+          if (error && error.name === "AbortError") {
+            setStatus(`Upload timed out after 30 seconds. Endpoint: ${REPORT_ENDPOINT}. The backend may be down, waking up slowly, or stuck sending email.`, "error");
             return;
           }
 

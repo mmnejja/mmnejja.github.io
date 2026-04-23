@@ -45,7 +45,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-app.post("/send-report", upload.single("file"), async (req, res) => {
+const sendReportHandler = async (req, res) => {
   try {
     const name = String(req.body.name || "").trim();
     const email = String(req.body.email || "").trim();
@@ -98,7 +98,10 @@ app.post("/send-report", upload.single("file"), async (req, res) => {
 
     res.status(500).json({ error: "Email failed" });
   }
-});
+};
+
+app.post("/send-report", upload.single("file"), sendReportHandler);
+app.post("/upload", upload.single("file"), sendReportHandler);
 
 const port = Number(process.env.PORT) || 3000;
 
