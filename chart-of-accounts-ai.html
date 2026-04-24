@@ -312,10 +312,7 @@
         <h1>Chart of Accounts AI Assistant</h1>
         <p>Ask for an account name and get the correct account number from your AI workflow.</p>
       </div>
-      <div style="display: flex; gap: 0.65rem; white-space: nowrap;">
-        <button id="openAssistantBtn" class="home-link" style="border: none; background: linear-gradient(135deg, #1b7f61, #21a078); color: white; padding: 0.52rem 0.95rem; cursor: pointer; font-weight: 700;">Open Assistant ↗</button>
-        <a class="home-link" href="index.html">Back to Portfolio</a>
-      </div>
+      <a class="home-link" href="index.html">Back to Portfolio</a>
     </header>
 
     <main class="chat-shell" aria-label="Chart of Accounts AI chat">
@@ -402,14 +399,6 @@
     sendBtn.addEventListener("click", sendMessage);
 
     addMessage("Hello. Ask me for a chart of accounts item and I will return the account number.", "ai");
-
-    // Open Assistant button handler
-    const openAssistantBtn = document.getElementById("openAssistantBtn");
-    if (openAssistantBtn) {
-      openAssistantBtn.addEventListener("click", () => {
-        window.open("chart-of-accounts-ai.html", "_blank");
-      });
-    }
   </script>
 </body>
 </html>

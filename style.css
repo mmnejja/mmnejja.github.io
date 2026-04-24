@@ -355,7 +355,6 @@ body.dark .header {
   color: #fff;
   margin-top: 1rem;
   padding: 0.62rem 1rem;
-  min-width: 160px;
   box-shadow: 0 8px 18px rgba(0, 168, 107, 0.22);
 }
 
