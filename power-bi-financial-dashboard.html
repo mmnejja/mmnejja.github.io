@@ -199,6 +199,8 @@
     <p class="eyebrow">Power BI Report</p>
     <h1>Power BI Financial Dashboard</h1>
     <p>Analyse automatique des indicateurs financiers pour suivre la performance, la marge et la dynamique de croissance en temps reel.</p>
+    
+    <button id="openReportBtn" style="margin: 1.2rem auto 0; padding: 0.72rem 1.4rem; background: linear-gradient(135deg, #00a86b, #009d62); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: transform 220ms ease, filter 220ms ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.filter='brightness(1.03)'" onmouseout="this.style.transform='translateY(0)'; this.style.filter='brightness(1)'">Open Report ↗</button>
 
     <div class="dashboard-wrapper">
       <iframe
@@ -208,5 +210,14 @@
       </iframe>
     </div>
   </section>
+
+  <script>
+    const openReportBtn = document.getElementById("openReportBtn");
+    if (openReportBtn) {
+      openReportBtn.addEventListener("click", () => {
+        window.open("https://app.powerbi.com/view?r=eyJrIjoiYjQ2YjkxN2QtMzVmYy00MzhhLWE3MzMtY2VhNWU5YTY3MzBlIiwidCI6ImRiZDY2NjRkLTRlYjktNDZlYi05OWQ4LTVjNDNiYTE1M2M2MSIsImMiOjl9", "_blank");
+      });
+    }
+  </script>
 </body>
 </html>

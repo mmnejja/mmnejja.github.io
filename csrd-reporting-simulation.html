@@ -385,6 +385,8 @@
           <li>File is uploaded as multipart form data</li>
         </ul>
       </div>
+
+      <button id="openSimulationBtn" style="margin: 1.4rem 0 0 0; padding: 0.72rem 1.4rem; background: linear-gradient(135deg, #1f9f79, #157257); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: transform 220ms ease, filter 220ms ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.filter='brightness(1.03)'" onmouseout="this.style.transform='translateY(0)'; this.style.filter='brightness(1)'">Open Simulation ↗</button>
     </section>
 
     <section class="card form-wrap" aria-labelledby="formTitle">
@@ -592,6 +594,14 @@
         }
       });
     });
+
+    // Open Simulation button handler
+    const openSimulationBtn = document.getElementById("openSimulationBtn");
+    if (openSimulationBtn) {
+      openSimulationBtn.addEventListener("click", () => {
+        window.open("csrd-reporting-simulation.html", "_blank");
+      });
+    }
   </script>
 </body>
 </html>
