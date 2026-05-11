@@ -63,6 +63,21 @@ npm run build
 
 The build artifacts will be stored in the `dist/` directory.
 
+## GitHub Actions Deployment
+
+This repo includes a workflow at [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) that builds the app and deploys it to Namecheap hosting over FTP.
+
+Before it can run, add these GitHub repository secrets:
+
+- `FTP_SERVER`
+- `FTP_USERNAME`
+- `FTP_PASSWORD`
+- `FTP_SERVER_DIR`
+- `FTP_PROTOCOL`
+- `FTP_PORT`
+
+The workflow uploads `dist/mohamedmnejja-portfolio/` to the directory you specify in `FTP_SERVER_DIR`.
+
 ## Styling
 
 The project uses a comprehensive CSS variable system for theming:
