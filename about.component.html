@@ -1,0 +1,28 @@
+<section id="about" class="section">
+  <div class="container about-grid">
+    <div appRevealOnScroll>
+      <p class="section-kicker">About</p>
+      <h2>Audit depth. Technology mindset. Measurable outcomes.</h2>
+      <p class="lead">
+        I combine financial audit rigor with IT audit, ERP process understanding, and AI-enabled automation to deliver resilient reporting and smarter finance operations.
+      </p>
+
+      <div class="pill-grid">
+        <span class="pill">PwC Experience</span>
+        <span class="pill">ITGC & Risk Controls</span>
+        <span class="pill">SAP | Odoo | Dynamics</span>
+        <span class="pill">Data-Driven Assurance</span>
+      </div>
+    </div>
+
+    <div class="timeline" appRevealOnScroll [revealDelay]="130">
+      @for (item of portfolioService.experienceTimeline; track item.title) {
+        <article class="timeline-item card">
+          <p class="period">{{ item.period }}</p>
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.summary }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,17 @@
+<section id="blog" class="section">
+  <div class="container">
+    <p class="section-kicker" appRevealOnScroll>Insights</p>
+    <h2 appRevealOnScroll [revealDelay]="60">Latest Articles</h2>
+
+    <div class="blog-grid">
+      @for (post of portfolioService.blogPosts; track post.id) {
+        <article class="blog-card card" appRevealOnScroll [revealDelay]="100">
+          <p class="meta">{{ post.publishedAt | date: 'MMM d, y' }} · {{ post.readingTime }} min read</p>
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.excerpt }}</p>
+          <a class="read-link" [href]="post.url">Read More</a>
+        </article>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,33 @@
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4);
+  z-index: 9999;
+  background: var(--color-accent);
+  color: #fff;
+  padding: var(--space-2) var(--space-4);
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+main {
+  position: relative;
+  z-index: 2;
+}
+
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(40, 114, 255, 0.16), transparent 32%),
+    radial-gradient(circle at 85% 22%, rgba(0, 168, 107, 0.11), transparent 28%),
+    radial-gradient(circle at 50% 100%, rgba(12, 63, 185, 0.1), transparent 44%);
+}

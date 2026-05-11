@@ -1,0 +1,31 @@
+<section id="skills" class="section">
+  <div class="container">
+    <p class="section-kicker" appRevealOnScroll>Capabilities</p>
+    <h2 appRevealOnScroll [revealDelay]="60">Skills Across Assurance, ERP, Data, and Automation</h2>
+
+    <div class="skills-grid">
+      @for (group of portfolioService.skills; track group.id) {
+        <article class="skill-card card" appRevealOnScroll [revealDelay]="120">
+          <div class="skill-head">
+            <span class="icon">{{ group.icon }}</span>
+            <h3>{{ group.category }}</h3>
+          </div>
+
+          <ul>
+            @for (skill of group.items; track skill.name) {
+              <li>
+                <div class="skill-row">
+                  <span>{{ skill.name }}</span>
+                  <span>{{ skill.level }}%</span>
+                </div>
+                <div class="meter">
+                  <div class="fill" [style.width.%]="skill.level"></div>
+                </div>
+              </li>
+            }
+          </ul>
+        </article>
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,44 @@
+<header class="header" role="banner">
+  <nav class="nav container" aria-label="Main navigation">
+    <a href="#home" class="logo" aria-label="Home">
+      Audit<span class="logo-accent">.</span>AI
+    </a>
+
+    <ul id="nav-links" class="nav-links" [ngClass]="{ open: menuOpen() }" role="list">
+      @for (item of portfolioService.navItems; track item.fragment) {
+        <li>
+          <a
+            [href]="'#' + item.fragment"
+            [class.active]="isActive(item.fragment)"
+            (click)="closeMenu()"
+          >
+            {{ item.label }}
+          </a>
+        </li>
+      }
+    </ul>
+
+    <div class="nav-actions">
+      <button
+        class="theme-toggle"
+        (click)="portfolioService.toggleTheme()"
+        [attr.aria-label]="portfolioService.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+        [attr.aria-pressed]="portfolioService.isDarkMode()"
+      >
+        {{ portfolioService.isDarkMode() ? 'Light' : 'Dark' }}
+      </button>
+
+      <button
+        class="menu-toggle"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen()"
+        aria-controls="nav-links"
+        aria-label="Toggle navigation menu"
+      >
+        <span></span>
+        <span></span>
+        <span [ngClass]="{ 'span-3': menuOpen() }"></span>
+      </button>
+    </div>
+  </nav>
+</header>

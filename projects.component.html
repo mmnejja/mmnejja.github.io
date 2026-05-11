@@ -1,0 +1,26 @@
+<section id="projects" class="section projects-section">
+  <div class="container">
+    <p class="section-kicker" appRevealOnScroll>Case Studies</p>
+    <h2 appRevealOnScroll [revealDelay]="60">Selected Projects</h2>
+
+    <div class="project-grid">
+      @for (project of portfolioService.projects; track project.id) {
+        <article class="project-card card" appRevealOnScroll [revealDelay]="100">
+          <h3>{{ project.title }}</h3>
+          <p>{{ project.description }}</p>
+
+          <ul class="tags">
+            @for (tag of project.tags; track tag) {
+              <li>{{ tag }}</li>
+            }
+          </ul>
+
+          <div class="actions">
+            <a [href]="project.repoUrl || '#'" target="_blank" rel="noopener noreferrer" class="btn btn-primary">View Project</a>
+            <a [href]="project.liveUrl || '#'" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Live Demo</a>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>

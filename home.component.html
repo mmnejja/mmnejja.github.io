@@ -1,0 +1,28 @@
+<section id="home" class="section hero-section">
+  <div class="container hero-grid">
+    <div class="hero-copy" appRevealOnScroll>
+      <p class="eyebrow">Audit | Accounting | IT Audit | ERP | AI | ESG</p>
+      <h1>Audit, Data &amp; AI Solutions</h1>
+      <p class="subtitle">
+        I help organizations modernize control environments, automate reporting, and deploy AI-powered finance workflows with confidence.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="#contact" class="btn btn-ghost">Contact Me</a>
+      </div>
+    </div>
+
+    <div class="hero-panel card" appRevealOnScroll [revealDelay]="120">
+      <p class="panel-title">Impact Highlights</p>
+      <div class="stats-grid">
+        @for (item of portfolioService.highlightStats; track item.label) {
+          <article class="stat-item">
+            <p class="stat-value">{{ item.value }}</p>
+            <p class="stat-label">{{ item.label }}</p>
+          </article>
+        }
+      </div>
+    </div>
+  </div>
+</section>

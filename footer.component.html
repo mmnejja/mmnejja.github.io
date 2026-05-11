@@ -1,0 +1,22 @@
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <p class="brand">Audit, Data &amp; AI Solutions</p>
+      <p class="tagline">Big 4 rigor with startup speed.</p>
+    </div>
+
+    <nav aria-label="Footer navigation" class="footer-links">
+      @for (item of portfolioService.navItems; track item.fragment) {
+        <a [href]="'#' + item.fragment">{{ item.label }}</a>
+      }
+    </nav>
+
+    <div class="socials">
+      @for (social of portfolioService.socialLinks; track social.platform) {
+        <a [href]="social.url" target="_blank" rel="noopener noreferrer">{{ social.platform }}</a>
+      }
+    </div>
+  </div>
+
+  <div class="container legal">© {{ year }} All rights reserved.</div>
+</footer>
